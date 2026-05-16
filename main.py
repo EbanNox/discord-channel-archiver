@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 import json
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -28,16 +29,20 @@ async def archive(ctx):
     
     channel_name = ctx.channel.name
 
-    if(not(channel_name)):
-       channel_name = "output"
+    # Check wether channel_name is defined. if not then define general name
+    if not channel_name:
+        channel_name = "output"
+
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
+    archive_folder = os.path.join("..", "archives", current_date, channel_name)
 
     # Create output directory if it doesn't exist
-    if not os.path.exists(channel_name):
-        os.makedirs(channel_name)
+    os.makedirs(archive_folder, exist_ok=True)
 
     with (
-        open(f'{channel_name}/msg.txt', 'w', encoding='utf-8') as file1,
-        open(f'{channel_name}/msg_embeds.txt', 'w',encoding='utf-8') as file2
+        open(os.path.join(archive_folder, "msg.txt"), 'w', encoding='utf-8') as file1,
+        open(os.path.join(archive_folder, "msg_embeds.txt"), 'w', encoding='utf-8') as file2
     ):
         # Fetch all messages
         async for message in ctx.channel.history(limit=None, oldest_first=True):
@@ -50,20 +55,21 @@ async def archive(ctx):
             for embed in message.embeds:
                 file2.write(
                     f"[id:{message.id}]-[{message.created_at}]-[{message.author}]:\n"
-                    + json.dumps(embed.to_dict())
+                    + json.dumps(embed.to_dict(), ensure_ascii=False, indent=4)
                     + "\n\n\n"
                 )
 
             # Save attachments
             for attachment in message.attachments:
                 # Create a unique file name based on the message ID and original file name
-                file_path = f"{channel_name}/{message.id}_{attachment.filename}"
+                file_path = os.path.join(archive_folder, f"{message.id}_{attachment.filename}")
                 await attachment.save(file_path)
 
     await ctx.send(
         "Preservation complete — this corner of the cosmos has been safely remembered!\n"
         "This chapter has been marked, stored, and settled into the archives."
     )
+    return
 
 @bot.command()
 async def version(ctx):
@@ -79,4 +85,4 @@ async def contributers(ctx):
     )
     return
 
-bot.run(token=token)
+bot.run(token)
