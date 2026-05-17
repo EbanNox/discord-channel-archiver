@@ -1,12 +1,11 @@
 # Simple Discord Channel Archiver
+## (((this readme is outdated atm, will update soon eventually)))
 
 This is a simple script that will archive all messages from a Discord channel into a folder. It will create a folder for each channel and save all their messages in that folder. It will also save all attachments and embeds.
 
 Warning: Two channels with the same name will overwrite each other.
 
 This bot is not meant to be run public. It will save the files in the host's file system. It is meant to be run locally or on a private cloud.
-
-⚠️ This bot is not maintained and if there are changes to the Discord API it may stop working. You may open a PR if you want to fix it, it should be pretty simple.
 
 ## Installation
 
