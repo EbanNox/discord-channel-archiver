@@ -1,6 +1,10 @@
 # Cosmic Nest Archivist
 *A custom-made Discord archiving system for Cosmic Nest.*
 
+<p align="center">
+  <img src="assets/branding/cosmic-nest-banner-a1.jpg" alt="Cosmic Nest banner">
+</p>
+
 ## Current Version
 Current development version: `v1.2a`
 This version adds Cosmic Nest themed online/offline HTML transcript generation, archive metadata, and development run folders for testing.
